@@ -7,14 +7,57 @@
 
 import UIKit
 
-class TwoLinedButton: UIButton {
+struct TwoLinedButtonViewModel {
+    let primaryText: String
+    let secondaryText: String
+}
 
-    /*
-    // Only override draw() if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
-    override func draw(_ rect: CGRect) {
-        // Drawing code
+final class TwoLinedButton: UIButton {
+
+ 
+    
+    private let primaryLabel: UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 1
+        label.textAlignment = .center
+        label.textColor = .white
+        label.font = .systemFont(ofSize: 20, weight: .semibold)
+        return label
+    }()
+    
+    private let secondaryLabel: UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 1
+        label.textAlignment = .center
+        label.textColor = .white
+        label.font = .systemFont(ofSize: 18, weight: .regular)
+        return label
+    }()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        addSubview(primaryLabel)
+        addSubview(secondaryLabel)
+        clipsToBounds = true
+        layer.cornerRadius = 8
+        layer.borderWidth = 1
+        layer.borderColor = UIColor.secondarySystemBackground.cgColor
+        backgroundColor = .systemGreen
     }
-    */
-
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func configure(with viewModel: TwoLinedButtonViewModel){
+        primaryLabel.text = viewModel.primaryText
+        secondaryLabel.text = viewModel.secondaryText
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        primaryLabel.frame = CGRect(x: 5, y: 0, width: frame.size.width-10, height: frame.size.height/2)
+        secondaryLabel.frame = CGRect(x: 5, y: frame.size.height/2, width: frame.size.width-10, height: frame.size.height/2)
+    }
+    
 }

@@ -1,5 +1,5 @@
 //
-//  IconTextButton.swift
+//  TwoLinedButton.swift
 //  MyCustomButtons
 //
 //  Created by Ngo Dang tan on 23/11/2020.
@@ -7,14 +7,64 @@
 
 import UIKit
 
-class IconTextButton: UIButton {
+struct IconTextButtonViewModel {
+    let text: String
+    let image: UIImage?
+    let backgroundColor: UIColor?
+}
 
-    /*
-    // Only override draw() if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
-    override func draw(_ rect: CGRect) {
-        // Drawing code
+final class IconTextButton: UIButton {
+
+ 
+    
+    private let label: UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 1
+        label.textAlignment = .center
+        label.textColor = .white
+        label.font = .systemFont(ofSize: 20, weight: .semibold)
+        return label
+    }()
+    
+    private let iconImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.tintColor = .white
+        imageView.contentMode = .scaleAspectFit
+        imageView.clipsToBounds = true
+        return imageView
+    }()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        addSubview(label)
+        addSubview(iconImageView)
+        clipsToBounds = true
+        layer.cornerRadius = 8
+        layer.borderWidth = 1
+        layer.borderColor = UIColor.secondarySystemBackground.cgColor
+
     }
-    */
-
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func configure(with viewModel: IconTextButtonViewModel){
+        label.text = viewModel.text
+        backgroundColor = viewModel.backgroundColor
+        iconImageView.image = viewModel.image
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        label.sizeToFit()
+        let iconSize: CGFloat = 30
+        let iconRightPadding: CGFloat = 8
+        let iconX: CGFloat = (frame.size.width - label.frame.size.width - iconSize - 5) / 2
+        iconImageView.frame = CGRect(x: iconX, y: (frame.size.height - iconSize)/2, width: iconSize, height: iconSize)
+        
+        label.frame = CGRect(x: iconX + iconSize + iconRightPadding, y: 0, width: label.frame.size.width, height: frame.size.height)
+        
+    }
+    
 }
